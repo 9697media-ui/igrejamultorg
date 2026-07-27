@@ -1,0 +1,22 @@
+{
+  "name": "igrejamult-org",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Site institucional da Igreja Evangélica Mult — organização religiosa sem fins lucrativos (Campinas/SP).",
+  "scripts": {
+    "build": "echo \"Site estatico (HTML/CSS/SVG) — nenhum passo de build necessario.\"",
+    "start": "npx --yes serve .",
+    "dev": "npx --yes serve ."
+  },
+  "keywords": [
+    "igreja-mult",
+    "organizacao-religiosa",
+    "sem-fins-lucrativos",
+    "landing-page"
+  ],
+  "author": "Igreja Evangélica Mult",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=18"
+  }
+}
