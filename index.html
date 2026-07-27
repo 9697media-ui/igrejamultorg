@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Igreja Mult — Organização religiosa sem fins lucrativos</title>
+  <title>Igreja Mult — Igreja evangélica em Campinas/SP</title>
   <meta name="description" content="A Igreja Evangélica Mult é uma organização religiosa sem fins lucrativos, sediada em Campinas/SP. Fomos chamados para viver & compartilhar a fé em Jesus de maneira autêntica." />
   <meta name="theme-color" content="#000000" />
   <link rel="canonical" href="https://igrejamult.org/" />
@@ -11,7 +11,7 @@
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Igreja Mult" />
-  <meta property="og:title" content="Igreja Mult — Organização religiosa sem fins lucrativos" />
+  <meta property="og:title" content="Igreja Mult — Igreja evangélica em Campinas/SP" />
   <meta property="og:description" content="Fomos chamados para viver & compartilhar a fé em Jesus de maneira autêntica. Organização religiosa sem fins lucrativos em Campinas/SP." />
   <meta property="og:locale" content="pt_BR" />
 
@@ -92,7 +92,7 @@
     .display { font-size: clamp(26px, 6.9vw, 76px); }
     h2.sec-title { font-size: clamp(28px, 5.4vw, 58px); margin-top: 14px; }
     h3 { font-size: clamp(15px, 2vw, 20px); letter-spacing: 0.02em; }
-    .serif-em { font-family: 'Apple Garamond', serif; font-style: italic; text-transform: none; }
+    .serif-em { font-family: 'Apple Garamond', serif; font-style: italic; text-transform: none; font-size: 1.48em; display: inline-block; margin-top: -0.28em; }
     p.lead { font-size: clamp(15px, 1.7vw, 19px); color: rgba(255,255,255,0.78); font-weight: 300; }
     .muted { color: var(--muted); }
 
@@ -125,6 +125,16 @@
     .nav .brand .mark { width: 34px; height: 34px; background: var(--orange); display: flex; align-items: center; justify-content: center; }
     .nav .brand .mark svg { width: 76%; height: 76%; }
     .nav .brand .nm { font-family: 'Druk Wide', sans-serif; font-size: 15px; letter-spacing: 0.02em; }
+    /* cabeçalho reativo: globo + frase (topo/fim) <-> logo MULT. (rolando) */
+    .nav .brand-swap { position: relative; display: flex; align-items: center; min-height: 40px; }
+    .nav .brand { transition: opacity .45s ease; }
+    .nav .brand-logo { position: absolute; left: 0; top: 50%; transform: translateY(-50%); opacity: 0; pointer-events: none; }
+    .nav .brand-intro { gap: 13px; opacity: 1; }
+    .nav.compact .brand-intro { opacity: 0; pointer-events: none; }
+    .nav.compact .brand-logo { opacity: 1; pointer-events: auto; }
+    .nav .globe { width: 34px; height: 34px; flex: none; }
+    .nav .tagline { font-family: 'Mono45', monospace; text-transform: uppercase; letter-spacing: .16em; font-size: clamp(7.5px, .92vw, 10px); line-height: 1.65; color: var(--ink); }
+    @media (max-width: 640px) { .nav .tagline { display: none; } }
     .nav nav { display: flex; gap: 26px; align-items: center; }
     .nav nav a {
       font-family: 'Mono45', monospace; text-transform: uppercase; letter-spacing: 0.16em;
@@ -153,14 +163,51 @@
     }
     .hero .frame { position: absolute; inset: 14px; border: 1px solid var(--line); pointer-events: none; z-index: 1; }
     .hero .wrap { position: relative; z-index: 2; }
-    .hero .badge-tilt { perspective: 900px; }
-    .hero-badge {
-      width: clamp(74px, 12vw, 104px); height: clamp(74px, 12vw, 104px); background: var(--orange);
-      display: flex; align-items: center; justify-content: center; margin-bottom: 30px;
-      filter: drop-shadow(0 16px 44px rgba(250,76,0,0.40));
-      transform: rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)); transition: transform .25s ease-out;
+    .hero .badge-tilt { position: relative; perspective: 900px; margin-bottom: 30px;
+      transform: perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)); transition: transform .25s ease-out; }
+    .hero .badge-glow { position: relative; z-index: 1; width: clamp(74px, 12vw, 104px); height: clamp(74px, 12vw, 104px);
+      filter: drop-shadow(0 16px 44px rgba(250,76,0,0.40)); will-change: transform, filter; }
+    .hero .halo { position: absolute; inset: -18%; z-index: 0; pointer-events: none; opacity: 0;
+      background: radial-gradient(circle, rgba(250,76,0,0.38) 0%, rgba(250,76,0,0.14) 46%, transparent 70%); }
+    .hero .badge-globe { position: absolute; inset: 0; z-index: 2; display: flex; align-items: center; justify-content: center;
+      opacity: 0; transform: scale(0.86); transition: opacity .6s ease, transform .7s cubic-bezier(.2,.8,.2,1); pointer-events: none; }
+    .hero .badge-globe svg { width: 100%; height: 100%; display: block; overflow: visible; }
+    .hero .badge-globe .gdraw { stroke-dasharray: 400; }
+    .hero .badge-globe .gspin { transform-box: fill-box; transform-origin: center; }
+    .hero .badge-rot { display: block; width: 100%; height: 100%; position: relative; z-index: 1; transform-origin: center;
+      transition: transform .55s cubic-bezier(.5,0,.2,1); }
+    .hero .badge { position: relative; overflow: hidden; background: var(--orange); width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center; border-radius: 50%;
+      opacity: 0; transform: scale(0);
+      transition: border-radius .55s cubic-bezier(.5,0,.2,1), opacity .4s ease, transform .7s cubic-bezier(.3,.9,.3,1); }
+    .hero .badge-glow > .wordmark { position: absolute; inset: 0; width: 100%; height: 100%; display: block; z-index: 3;
+      opacity: 0; transition: opacity .5s ease; pointer-events: none; }
+    .hero .shine { position: absolute; inset: -40%; z-index: 2; pointer-events: none; transform: translateX(-130%);
+      background: linear-gradient(115deg, transparent 38%, rgba(255,255,255,0.42) 50%, transparent 62%); }
+    @media (prefers-reduced-motion: no-preference) {
+      /* animações contínuas (float/shine/halo) removidas a pedido — badge fica estático fora do boomerang */
+      .hero .badge-globe .gdraw { animation: draw 1.2s ease .2s both; }
+      .hero .badge-globe .gspin { animation: spin 8s linear infinite; }
     }
-    .hero-badge svg { width: 74%; height: 74%; }
+    @keyframes floatY { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+    @keyframes shine { 0% { transform: translateX(-130%); } 16% { transform: translateX(130%); } 100% { transform: translateX(130%); } }
+    @keyframes haloPulse { 0%,100% { opacity: .4; transform: scale(.9); } 50% { opacity: .85; transform: scale(1.12); } }
+    @keyframes draw { from { stroke-dashoffset: 400; } to { stroke-dashoffset: 0; } }
+    /* logo MULT. animado (mini) — mesmo do hero (globo -> preenche -> MULT), no cabeçalho e rodapé */
+    .logo-badge { position: relative; width: 34px; height: 34px; flex: none; display: inline-block; }
+    .foot .logo-badge { width: 40px; height: 40px; }
+    .logo-globe { position: absolute; inset: 0; z-index: 2; opacity: 0; transform: scale(.86); pointer-events: none;
+      transition: opacity .5s ease, transform .6s cubic-bezier(.2,.8,.2,1); }
+    .logo-globe svg { width: 100%; height: 100%; display: block; overflow: visible; }
+    .logo-globe .gdraw { stroke-dasharray: 320; }
+    .logo-globe .gspin { transform-box: fill-box; transform-origin: center; }
+    .logo-rot { position: relative; z-index: 1; width: 100%; height: 100%; transform-origin: center; transition: transform .55s cubic-bezier(.5,0,.2,1); }
+    .logo-sq { position: relative; display: block; width: 100%; height: 100%; background: var(--orange); overflow: hidden;
+      border-radius: 50%; opacity: 0; transform: scale(0);
+      transition: border-radius .55s cubic-bezier(.5,0,.2,1), opacity .4s ease, transform .6s cubic-bezier(.3,.9,.3,1); }
+    .logo-badge > .wordmark { position: absolute; inset: 0; width: 100%; height: 100%; display: block; z-index: 3; opacity: 0;
+      transition: opacity .4s ease; pointer-events: none; }
+    @media (prefers-reduced-motion: no-preference) { .logo-globe .gspin { animation: spin 8s linear infinite; } }
     .hero h1 { max-width: 15ch; }
     .hero h1 .o { color: var(--orange); }
     .hero .sub {
@@ -300,12 +347,22 @@
     .foot-bottom { margin-top: 36px; padding-top: 22px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-family: 'Mono45 Light', monospace; text-transform: uppercase; letter-spacing: 0.16em; font-size: 9.5px; color: var(--muted-2); }
     .foot-bottom .accent { color: var(--orange); }
 
-    /* ---------- FOTOS ---------- */
-    .hero .hero-photo { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
-    .hero .hero-photo img { width: 100%; height: 100%; object-fit: cover; object-position: 55% 24%; filter: grayscale(1) brightness(.52) contrast(1.06); opacity: .3; }
-    .hero .hero-photo::after { content:''; position: absolute; inset: 0;
-      background: linear-gradient(90deg, #000 5%, rgba(0,0,0,.42) 44%, transparent 72%), linear-gradient(0deg, #000 3%, transparent 32%); }
+    /* ---------- LIDERANÇA ---------- */
+    .leaders { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+    @media (max-width: 720px) { .leaders { grid-template-columns: 1fr; } }
+    .leader { background: var(--bg-card); border: 1px solid var(--line); border-radius: 4px; padding: 28px 26px; display: flex; gap: 22px; align-items: center; transition: border-color .3s ease, transform .3s ease; }
+    .leader:hover { border-color: var(--line-strong); transform: translateY(-4px); }
+    .leader .avatar { flex: none; width: 96px; height: 96px; border-radius: 50%; overflow: hidden; border: 2px solid var(--orange); }
+    .leader .avatar img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); transition: filter .5s ease, transform .6s ease; }
+    .leader:hover .avatar img { filter: grayscale(0); transform: scale(1.05); }
+    .leader .role { font-family: 'Mono45', monospace; text-transform: uppercase; letter-spacing: .2em; font-size: 9.5px; color: var(--orange); }
+    .leader h3 { font-size: clamp(17px, 2.2vw, 21px); margin: 9px 0 8px; }
+    .leader p { font-size: 13px; color: var(--muted); font-weight: 300; }
+    .leader .ig { display: inline-flex; align-items: center; gap: 6px; margin-top: 13px; font-family: 'Mono45', monospace; text-transform: uppercase; font-size: 9.5px; letter-spacing: .14em; color: var(--muted-2); text-decoration: none; transition: color .2s ease; }
+    .leader .ig:hover { color: var(--orange); }
+    @media (max-width: 420px) { .leader { flex-direction: column; align-items: flex-start; gap: 16px; } }
 
+    /* ---------- FOTOS ---------- */
     .about-media { margin-top: 28px; position: relative; border-radius: 4px; overflow: hidden; border: 1px solid var(--line); }
     .about-media img { width: 100%; height: 420px; object-fit: cover; object-position: 50% 42%; filter: grayscale(1) contrast(1.03); display: block; transition: filter .5s ease, transform .7s ease; }
     .about-media:hover img { filter: grayscale(0); transform: scale(1.03); }
@@ -336,18 +393,53 @@
 
   <!-- ============ NAV ============ -->
   <header class="nav" id="nav">
-    <a class="brand" href="#topo" aria-label="Igreja Mult — início">
-      <span class="mark" aria-hidden="true">
-        <svg viewBox="0 0 461.46 461.43" role="img" aria-label="MULT.">
-          <path fill="#ffffff" d="M32.79,196.94h38.56l22.54,41.33,22.94-41.33h36.98v73.56h-27.78v-45.88l-25.81,45.88h-14.34l-25.71-45.88v45.88h-27.39v-73.56ZM164.77,196.94h28.18v32.93c0,9,3.96,19.78,22.54,19.78s22.45-10.78,22.45-19.78v-32.93h28.08v35.1c0,14.24-6.72,39.65-48.45,39.65h-3.96c-42.81,0-48.85-25.41-48.85-39.65v-35.1ZM304.91,196.94v52.5h51.02v21.06h-79.1v-73.56h28.08ZM366.41,270.51v-53.49h-31.74v-20.07h91.56v20.07h-31.74v53.49h-28.08Z"/>
-          <rect fill="#ffffff" x="411.22" y="249.25" width="21.11" height="21.48"/>
+    <div class="brand-swap">
+      <a class="brand brand-intro" href="#topo" aria-label="Igreja Mult — início">
+        <svg class="globe" viewBox="0 0 100 100" role="img" aria-label="Mult">
+          <g fill="none" stroke="#ffffff" stroke-width="4">
+            <circle cx="50" cy="50" r="46" />
+            <g class="spin">
+              <line x1="50" y1="4" x2="50" y2="96" />
+              <ellipse cx="50" cy="50" rx="23" ry="46" />
+            </g>
+            <line x1="4" y1="50" x2="96" y2="50" />
+            <line x1="11" y1="27" x2="89" y2="27" />
+            <line x1="11" y1="73" x2="89" y2="73" />
+          </g>
         </svg>
-      </span>
-      <span class="nm">MULT.</span>
-    </a>
+        <span class="tagline">Fomos chamados para viver &amp; compartilhar<br />a fé em Jesus de maneira autêntica</span>
+      </a>
+      <a class="brand brand-logo" href="#topo" aria-label="Igreja Mult — início">
+        <span class="logo-badge" aria-hidden="true">
+          <span class="logo-globe">
+            <svg viewBox="0 0 100 100">
+              <g class="gdraw" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round">
+                <circle cx="50" cy="50" r="49" />
+                <g class="gspin">
+                  <line x1="50" y1="1" x2="50" y2="99" />
+                  <ellipse cx="50" cy="50" rx="24.5" ry="49" />
+                </g>
+                <line x1="1" y1="50" x2="99" y2="50" />
+                <line x1="8" y1="26" x2="92" y2="26" />
+                <line x1="8" y1="74" x2="92" y2="74" />
+              </g>
+            </svg>
+          </span>
+          <span class="logo-rot">
+            <span class="logo-sq"></span>
+          </span>
+          <svg class="wordmark" viewBox="0 0 461.46 461.43" role="img" aria-label="MULT.">
+            <path fill="#ffffff" d="M32.79,196.94h38.56l22.54,41.33,22.94-41.33h36.98v73.56h-27.78v-45.88l-25.81,45.88h-14.34l-25.71-45.88v45.88h-27.39v-73.56ZM164.77,196.94h28.18v32.93c0,9,3.96,19.78,22.54,19.78s22.45-10.78,22.45-19.78v-32.93h28.08v35.1c0,14.24-6.72,39.65-48.45,39.65h-3.96c-42.81,0-48.85-25.41-48.85-39.65v-35.1ZM304.91,196.94v52.5h51.02v21.06h-79.1v-73.56h28.08ZM366.41,270.51v-53.49h-31.74v-20.07h91.56v20.07h-31.74v53.49h-28.08Z"/>
+            <rect fill="#ffffff" x="411.22" y="249.25" width="21.11" height="21.48"/>
+          </svg>
+        </span>
+        <span class="nm">MULT.</span>
+      </a>
+    </div>
     <button class="nav-toggle" id="navToggle" aria-label="Abrir menu">MENU</button>
     <nav id="navMenu">
       <a href="#sobre">Sobre</a>
+      <a href="#lideranca">Liderança</a>
       <a href="#proposito">Propósito</a>
       <a href="#confissao">Confissão de Fé</a>
       <a href="#participar">Participe</a>
@@ -358,13 +450,30 @@
 
   <!-- ============ HERO ============ -->
   <section class="hero" id="topo">
-    <div class="hero-photo" aria-hidden="true"><img src="assets/img/teclado.jpg" alt="" /></div>
     <div class="glow" aria-hidden="true"></div>
     <div class="frame" aria-hidden="true"></div>
     <div class="wrap">
-      <div class="badge-tilt">
-        <div class="hero-badge" id="heroBadge" aria-hidden="true">
-          <svg viewBox="0 0 461.46 461.43" role="img" aria-label="MULT.">
+      <div class="badge-tilt" id="badgeTilt">
+        <div class="badge-glow" aria-hidden="true">
+          <div class="halo"></div>
+          <div class="badge-globe">
+            <svg viewBox="0 0 100 100">
+              <g class="gdraw" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round">
+                <circle cx="50" cy="50" r="49" />
+                <g class="gspin">
+                  <line x1="50" y1="1" x2="50" y2="99" />
+                  <ellipse cx="50" cy="50" rx="24.5" ry="49" />
+                </g>
+                <line x1="1" y1="50" x2="99" y2="50" />
+                <line x1="8" y1="26" x2="92" y2="26" />
+                <line x1="8" y1="74" x2="92" y2="74" />
+              </g>
+            </svg>
+          </div>
+          <div class="badge-rot">
+            <div class="badge" id="heroBadge"></div>
+          </div>
+          <svg class="wordmark" viewBox="0 0 461.46 461.43" role="img" aria-label="MULT.">
             <path fill="#ffffff" d="M32.79,196.94h38.56l22.54,41.33,22.94-41.33h36.98v73.56h-27.78v-45.88l-25.81,45.88h-14.34l-25.71-45.88v45.88h-27.39v-73.56ZM164.77,196.94h28.18v32.93c0,9,3.96,19.78,22.54,19.78s22.45-10.78,22.45-19.78v-32.93h28.08v35.1c0,14.24-6.72,39.65-48.45,39.65h-3.96c-42.81,0-48.85-25.41-48.85-39.65v-35.1ZM304.91,196.94v52.5h51.02v21.06h-79.1v-73.56h28.08ZM366.41,270.51v-53.49h-31.74v-20.07h91.56v20.07h-31.74v53.49h-28.08Z"/>
             <rect fill="#ffffff" x="411.22" y="249.25" width="21.11" height="21.48"/>
           </svg>
@@ -372,12 +481,12 @@
       </div>
       <span class="kicker">Igreja Evangélica Mult — Campinas / SP</span>
       <h1 class="display">Viver &amp; compartilhar<br />a fé em Jesus<br />de maneira <span class="serif-em o">autêntica</span></h1>
-      <p class="sub">Somos uma <strong>organização religiosa sem fins lucrativos</strong> e um projeto de plantação de uma nova igreja para as novas gerações — uma comunidade de pessoas diferentes, unidas pelo amor a Jesus.</p>
+      <p class="sub">Somos um <strong>projeto de plantação de uma nova igreja</strong> para as novas gerações — uma comunidade de fé sustentável, feita de pessoas diferentes e unidas pelo amor a Jesus.</p>
       <div class="cta-row">
         <a class="btn primary" href="#participar">Faça parte <span class="arrow">→</span></a>
         <a class="btn" href="#sobre">Conheça a Mult <span class="arrow">→</span></a>
       </div>
-      <div class="status"><span class="dot"></span> Organização religiosa · CNPJ ativo desde 2024</div>
+      <div class="status"><span class="dot"></span> Igreja evangélica · CNPJ ativo desde 2024</div>
     </div>
   </section>
 
@@ -397,12 +506,43 @@
         <div class="about-copy reveal">
           <p class="lead">A <strong>Igreja Evangélica Mult</strong> nasceu do sonho de plantar uma nova igreja a partir de um coração missional e fiel à Palavra, respondendo a uma pergunta que sempre nos inquietou: onde nossos filhos e netos poderão aprender a viver e ser igreja diante dos desafios atuais?</p>
           <p class="muted">Entendemos que Jesus fez algo por nós, está fazendo algo em nós e deseja fazer algo através de nós. Por isso sonhamos com uma comunidade de fé sustentável e <strong>multigeracional</strong>, onde os mais experientes servem com fidelidade, inspirando e investindo nas gerações mais novas — e onde cada pessoa entende o seu papel e a sua responsabilidade.</p>
-          <p class="muted">Somos liderados pelo casal plantador <strong>Pr. Tiago Corrêa &amp; Aline Corrêa</strong>, com sede em Campinas/SP, e nos organizamos como uma <strong>organização religiosa sem fins lucrativos</strong>, mantida pela generosidade voluntária de quem abraça essa missão.</p>
+          <p class="muted">Somos liderados pelo casal plantador <strong>Pr. Tiago Corrêa &amp; Aline Corrêa</strong>, com sede em Campinas/SP, e nos mantemos inteiramente pela <strong>generosidade voluntária</strong> de quem abraça essa missão — cada recurso é reinvestido na obra e no cuidado com as pessoas.</p>
           <div class="factlist">
             <div class="row"><span class="k">Razão social</span><span class="v">Igreja Evangélica Mult</span></div>
-            <div class="row"><span class="k">Natureza</span><span class="v">Organização religiosa sem fins lucrativos</span></div>
+            <div class="row"><span class="k">Natureza</span><span class="v">Organização religiosa</span></div>
             <div class="row"><span class="k">Fundação</span><span class="v">19 de março de 2024</span></div>
             <div class="row"><span class="k">Sede</span><span class="v">Campinas — São Paulo, Brasil</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ LIDERANÇA ============ -->
+  <section class="block" id="lideranca">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="kicker">Liderança</span>
+        <h2 class="sec-title">Quem caminha à frente</h2>
+        <p class="lead">Pastores comprometidos com a Palavra e apaixonados por pessoas, dedicados a servir e cuidar da comunidade Mult.</p>
+      </div>
+      <div class="leaders">
+        <div class="leader reveal">
+          <div class="avatar"><img src="assets/img/pastor-tiago.jpg" alt="Pr. Tiago Corrêa" loading="lazy" /></div>
+          <div>
+            <span class="role">Pastor plantador</span>
+            <h3>Pr. Tiago Corrêa</h3>
+            <p>Casado com Aline, pai da Laurinha. Vive e compartilha a fé em Jesus de maneira autêntica, à frente da plantação da Mult.</p>
+            <a class="ig" href="https://www.instagram.com/prtiagocorrea/" target="_blank" rel="noopener">@prtiagocorrea →</a>
+          </div>
+        </div>
+        <div class="leader reveal">
+          <div class="avatar"><img src="assets/img/pastor-joao.jpg" alt="Pr. João Lazarini" loading="lazy" /></div>
+          <div>
+            <span class="role">Pastor auxiliar · Multkids</span>
+            <h3>Pr. João Lazarini</h3>
+            <p>Casado com Lary, pai do Mateus. Ajuda a nova geração — e as crianças no Multkids — a viver e compartilhar a fé em Jesus.</p>
+            <a class="ig" href="https://www.instagram.com/jglazarini/" target="_blank" rel="noopener">@jglazarini →</a>
           </div>
         </div>
       </div>
@@ -548,7 +688,7 @@
     <div class="wrap">
       <div class="sec-head reveal">
         <span class="kicker">Transparência &amp; dados institucionais</span>
-        <h2 class="sec-title">Uma organização sem fins lucrativos</h2>
+        <h2 class="sec-title">Um projeto sério e transparente</h2>
       </div>
       <div class="legal-banner reveal">
         <p class="lead">A <strong>Igreja Evangélica Mult</strong> é uma pessoa jurídica de direito privado, constituída como <strong>organização religiosa sem fins lucrativos</strong>, regularmente inscrita no Cadastro Nacional da Pessoa Jurídica (CNPJ) e em situação cadastral ativa junto à Receita Federal do Brasil. Não distribuímos lucros ou patrimônio: todos os recursos são aplicados integralmente na manutenção e no cumprimento das nossas finalidades religiosas, sociais e comunitárias.</p>
@@ -601,19 +741,35 @@
       <div class="foot-top">
         <div>
           <div class="brand">
-            <span class="mark" aria-hidden="true">
-              <svg viewBox="0 0 461.46 461.43" role="img" aria-label="MULT.">
+            <span class="logo-badge" aria-hidden="true">
+              <span class="logo-globe">
+                <svg viewBox="0 0 100 100">
+                  <g class="gdraw" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round">
+                    <circle cx="50" cy="50" r="49" />
+                    <g class="gspin">
+                      <line x1="50" y1="1" x2="50" y2="99" />
+                      <ellipse cx="50" cy="50" rx="24.5" ry="49" />
+                    </g>
+                    <line x1="1" y1="50" x2="99" y2="50" />
+                    <line x1="8" y1="26" x2="92" y2="26" />
+                    <line x1="8" y1="74" x2="92" y2="74" />
+                  </g>
+                </svg>
+              </span>
+              <span class="logo-rot">
+                <span class="logo-sq"></span>
+              </span>
+              <svg class="wordmark" viewBox="0 0 461.46 461.43" role="img" aria-label="MULT.">
                 <path fill="#ffffff" d="M32.79,196.94h38.56l22.54,41.33,22.94-41.33h36.98v73.56h-27.78v-45.88l-25.81,45.88h-14.34l-25.71-45.88v45.88h-27.39v-73.56ZM164.77,196.94h28.18v32.93c0,9,3.96,19.78,22.54,19.78s22.45-10.78,22.45-19.78v-32.93h28.08v35.1c0,14.24-6.72,39.65-48.45,39.65h-3.96c-42.81,0-48.85-25.41-48.85-39.65v-35.1ZM304.91,196.94v52.5h51.02v21.06h-79.1v-73.56h28.08ZM366.41,270.51v-53.49h-31.74v-20.07h91.56v20.07h-31.74v53.49h-28.08Z"/>
                 <rect fill="#ffffff" x="411.22" y="249.25" width="21.11" height="21.48"/>
               </svg>
             </span>
             <div>
-              <div class="nm">MULT.</div>
               <div class="tg">Viver &amp; compartilhar a fé em Jesus</div>
             </div>
           </div>
         </div>
-        <p class="legal">Igreja Evangélica Mult — Organização religiosa sem fins lucrativos.<br />CNPJ 54.380.087/0001-07 · Rua Eduardo Lane, 270 — Jardim Brasil, Campinas / SP · CEP 13.073-002.</p>
+        <p class="legal">Igreja Evangélica Mult — Campinas / SP.<br />CNPJ 54.380.087/0001-07 · Rua Eduardo Lane, 270 — Jardim Brasil · CEP 13.073-002.</p>
       </div>
       <div class="foot-bottom">
         <span>© 2026 Igreja Evangélica Mult</span>
@@ -625,9 +781,19 @@
   <script>
     // Nav: sombra ao rolar
     var nav = document.getElementById('nav');
-    window.addEventListener('scroll', function () {
-      if (window.scrollY > 24) nav.classList.add('scrolled'); else nav.classList.remove('scrolled');
-    }, { passive: true });
+    function onScroll() {
+      var y = window.scrollY;
+      if (y > 24) nav.classList.add('scrolled'); else nav.classList.remove('scrolled');
+      var docH = document.documentElement.scrollHeight;
+      var winH = window.innerHeight;
+      var nearTop = y < 100;
+      var nearEnd = (y + winH) >= (docH - 280);
+      // topo ou fim -> globo + frase; meio -> logo MULT.
+      if (nearTop || nearEnd) nav.classList.remove('compact'); else nav.classList.add('compact');
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    onScroll();
 
     // Menu mobile
     var toggle = document.getElementById('navToggle');
@@ -647,16 +813,100 @@
       document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('in'); });
     }
 
-    // Parallax 3D suave no badge do hero
-    if (!reduce) {
-      var badge = document.getElementById('heroBadge');
-      window.addEventListener('pointermove', function (e) {
-        var px = (e.clientX / window.innerWidth) - 0.5;
-        var py = (e.clientY / window.innerHeight) - 0.5;
-        badge.style.setProperty('--ry', (px * 16).toFixed(2) + 'deg');
-        badge.style.setProperty('--rx', (-py * 12).toFixed(2) + 'deg');
-      }, { passive: true });
-    }
+    // Logos MULT: entrada completa (globo desenha -> laranja preenche -> MULT surge -> morph) SEMPRE que a logo
+    // aparece — hero no load, rodapé ao entrar na tela, cabeçalho ao aparecer no scroll — + boomerang a cada 15s (sincronizado).
+    (function () {
+      var heroSq = document.getElementById('heroBadge');
+      var items = [], heroItem = null, navItem = null, footItem = null;
+      if (heroSq) {
+        heroItem = { globe: document.querySelector('.hero .badge-globe'), sq: heroSq, rot: document.querySelector('.hero .badge-rot'), word: document.querySelector('.hero .badge-glow > .wordmark') };
+        items.push(heroItem);
+      }
+      document.querySelectorAll('.logo-badge').forEach(function (el) {
+        var it = { globe: el.querySelector('.logo-globe'), sq: el.querySelector('.logo-sq'), rot: el.querySelector('.logo-rot'), word: el.querySelector('.wordmark'), root: el };
+        items.push(it);
+        if (el.closest('.brand-logo')) navItem = it;
+        else if (el.closest('.foot')) footItem = it;
+      });
+      if (!items.length) return;
+
+      // gira o quadrado sem transição; o MULT contra-gira pra ficar sempre reto
+      function setRot(it, deg) {
+        it.rot.style.transition = 'none';
+        it.rot.style.transform = 'rotate(' + deg + 'deg)';
+        void it.rot.offsetWidth;
+        it.rot.style.transition = '';
+      }
+
+      // morph completo: quadrado -> círculo -> losango -> círculo -> quadrado
+      function morph(it) {
+        var s = 650, t = 0;
+        setTimeout(function () { it.sq.style.borderRadius = '50%'; }, t); t += s;   // quadrado -> círculo
+        setTimeout(function () { setRot(it, 45); }, t); t += 120;                    // gira 45° (no círculo)
+        setTimeout(function () { it.sq.style.borderRadius = '0'; }, t); t += s;      // círculo -> losango
+        setTimeout(function () { it.sq.style.borderRadius = '50%'; }, t); t += s;    // losango -> círculo
+        setTimeout(function () { setRot(it, 0); }, t); t += 120;                     // volta a 0°
+        setTimeout(function () { it.sq.style.borderRadius = '0'; }, t);              // círculo -> quadrado
+      }
+
+      // estado final estático (sem animar) — usado no reduced-motion
+      function settle(it) {
+        if (it.globe) it.globe.style.opacity = '0';
+        setRot(it, 0);
+        it.sq.style.transition = 'none';
+        it.sq.style.opacity = '1'; it.sq.style.transform = 'scale(1)'; it.sq.style.borderRadius = '0';
+        void it.sq.offsetWidth;
+        it.sq.style.transition = '';
+        it.word.style.opacity = '1';
+      }
+
+      if (reduce) { items.forEach(settle); return; }
+
+      // ENTRADA completa da logo (globo -> preenche -> MULT -> morph)
+      function intro(it) {
+        if (!it) return;
+        setRot(it, 0);
+        it.sq.style.transition = 'none';
+        it.sq.style.opacity = '0'; it.sq.style.transform = 'scale(0)'; it.sq.style.borderRadius = '50%';
+        it.word.style.opacity = '0';
+        void it.sq.offsetWidth;
+        it.sq.style.transition = '';
+        if (it.globe) {
+          it.globe.style.opacity = '0'; it.globe.style.transform = 'scale(.86)';
+          var gd = it.globe.querySelector('.gdraw');
+          if (gd) { gd.style.animation = 'none'; void gd.offsetWidth; gd.style.animation = 'draw 1.1s ease both'; }
+        }
+        setTimeout(function () { if (it.globe) { it.globe.style.opacity = '1'; it.globe.style.transform = 'scale(1)'; } }, 60);
+        setTimeout(function () { it.sq.style.opacity = '1'; it.sq.style.transform = 'scale(1)'; if (it.globe) { it.globe.style.opacity = '0'; it.globe.style.transform = 'scale(1.05)'; } }, 1150);
+        setTimeout(function () { it.word.style.opacity = '1'; }, 1650);
+        setTimeout(function () { it.sq.style.borderRadius = '0'; }, 2050);   // círculo -> quadrado (assenta)
+        setTimeout(function () { morph(it); }, 2450);                        // o "restante" da animação
+      }
+
+      if (heroItem) intro(heroItem);
+
+      // RODAPÉ: entra sempre que aparece na tela
+      if (footItem) {
+        if ('IntersectionObserver' in window) {
+          new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) intro(footItem); }); }, { threshold: 0.3 }).observe(footItem.root);
+        } else { intro(footItem); }
+      }
+
+      // CABEÇALHO: entra sempre que a logo compacta aparece (ao rolar) — o globo anima para a logo
+      if (navItem) {
+        var navEl = document.getElementById('nav');
+        var was = navEl.classList.contains('compact');
+        if (was) intro(navItem);
+        new MutationObserver(function () {
+          var is = navEl.classList.contains('compact');
+          if (is && !was) intro(navItem);
+          was = is;
+        }).observe(navEl, { attributes: true, attributeFilter: ['class'] });
+      }
+
+      // BOOMERANG a cada 15s (todos em sincronia)
+      setInterval(function () { items.forEach(morph); }, 15000);
+    })();
   </script>
 </body>
 </html>
