@@ -111,6 +111,15 @@
     .btn.primary:hover { background: #ff5f1a; }
     .btn .arrow { color: var(--orange); }
     .btn.primary .arrow { color: #fff; }
+    /* botões de download dos documentos (PDF) */
+    .doc-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 38px; }
+    .doc-actions .btn { align-items: baseline; }
+    .doc-actions .sz { font-family: 'Mono45', monospace; font-size: 9px; letter-spacing: 0.12em; color: var(--muted-2); }
+    .doc-actions .btn.primary .sz { color: rgba(255,255,255,0.75); }
+    @media (max-width: 560px) {
+      .doc-actions { flex-direction: column; align-items: stretch; }
+      .doc-actions .btn { justify-content: center; }
+    }
 
     /* ---------- NAV ---------- */
     header.nav {
@@ -634,6 +643,16 @@
         <div class="creed-item reveal"><span class="ci">†</span><div><h3>Salvação</h3><p>A salvação é um dom de Deus, recebido somente pela graça mediante a fé em Jesus Cristo como Senhor e Salvador.</p></div></div>
         <div class="creed-item reveal"><span class="ci">†</span><div><h3>A Igreja</h3><p>A Igreja é o corpo e a noiva de Cristo — em nível local, uma comunidade de amor que impacta sua cultura com o Evangelho.</p></div></div>
         <div class="creed-item reveal"><span class="ci">†</span><div><h3>A volta de Cristo</h3><p>Cremos na volta pessoal e iminente do Senhor Jesus Cristo, que virá para os que foram redimidos por Ele.</p></div></div>
+      </div>
+      <div class="doc-actions reveal">
+        <a class="btn primary" href="assets/docs/confissao-de-fe.pdf" download
+           aria-label="Baixar a confissão de fé completa em PDF">
+          Confissão de fé completa <span class="sz">PDF · 38 pág.</span> <span class="arrow">↓</span>
+        </a>
+        <a class="btn" href="assets/docs/projeto-mult.pdf" download
+           aria-label="Baixar o projeto da Igreja Mult em PDF">
+          Projeto da Mult <span class="sz">PDF · 36 pág.</span> <span class="arrow">↓</span>
+        </a>
       </div>
     </div>
   </section>
