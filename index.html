@@ -163,6 +163,13 @@
     }
     .hero .frame { position: absolute; inset: 14px; border: 1px solid var(--line); pointer-events: none; z-index: 1; }
     .hero .wrap { position: relative; z-index: 2; }
+    /* vídeo de fundo do hero (mantém o tratamento P&B da identidade) */
+    .hero .hero-video { position: absolute; inset: 0; z-index: 0; overflow: hidden; background: #000; pointer-events: none; }
+    .hero .hero-video video { width: 100%; height: 100%; object-fit: cover; object-position: 50% 42%; display: block;
+      filter: grayscale(1) brightness(.82) contrast(1.04); opacity: .8; }
+    .hero .hero-video::after { content: ''; position: absolute; inset: 0; pointer-events: none;
+      background: linear-gradient(90deg, rgba(0,0,0,.9) 0%, rgba(0,0,0,.52) 38%, rgba(0,0,0,.08) 72%, rgba(0,0,0,0) 100%),
+                  linear-gradient(0deg, #000 1%, rgba(0,0,0,0) 26%); }
     .hero .badge-tilt { position: relative; perspective: 900px; margin-bottom: 30px;
       transform: perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)); transition: transform .25s ease-out; }
     .hero .badge-glow { position: relative; z-index: 1; width: clamp(74px, 12vw, 104px); height: clamp(74px, 12vw, 104px);
@@ -450,6 +457,9 @@
 
   <!-- ============ HERO ============ -->
   <section class="hero" id="topo">
+    <div class="hero-video" aria-hidden="true">
+      <video id="heroVideo" poster="assets/video/hero-poster.jpg" muted loop playsinline preload="none" tabindex="-1"></video>
+    </div>
     <div class="glow" aria-hidden="true"></div>
     <div class="frame" aria-hidden="true"></div>
     <div class="wrap">
@@ -906,6 +916,23 @@
 
       // BOOMERANG a cada 15s (todos em sincronia)
       setInterval(function () { items.forEach(morph); }, 15000);
+    })();
+
+    // Vídeo de fundo do hero: carregado sob demanda. Em reduced-motion ou conexão
+    // limitada (economia de dados / 2G) nem baixa o vídeo — fica só o poster.
+    (function () {
+      var v = document.getElementById('heroVideo');
+      if (!v) return;
+      var c = navigator.connection || {};
+      if (reduce || c.saveData === true || /(^|-)(2g|slow-2g)$/.test(c.effectiveType || '')) return;
+      v.muted = true; v.playsInline = true;
+      // play() só quando há dados: chamar junto com load() aborta a promise (AbortError)
+      v.addEventListener('canplay', function () {
+        var p = v.play();
+        if (p && p.catch) p.catch(function () {});
+      }, { once: true });
+      v.src = 'assets/video/hero.mp4';
+      v.load();
     })();
   </script>
 </body>
